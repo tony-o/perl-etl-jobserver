@@ -9,6 +9,7 @@ $etl->dbdsn("dbi:SQLite:db.db");
 #$etl->dbname("skodetl");
 $etl->dbuser("user");
 $etl->dbuser("pass");
+$etl->debug(1);
 
 $etl->connect();
 my $job = $etl->register("PETERPAN");

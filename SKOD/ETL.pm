@@ -1,6 +1,7 @@
 package SKOD::ETL;
 use Moose;
-use DBIx::Simple;
+use SKOD::DB::Schema;
+use DBIx::Class::ResultClass::HashRefInflator; 
 use Digest::MD5 qw(md5_hex);
 use Try::Tiny;
 use UUID::Tiny;
@@ -12,7 +13,7 @@ has 'db'     => (
 );
 
 has 'dbdsn'  => (
-  is => 'rw'
+  is => 'rw',
 );
 
 has 'dbname' => (
@@ -32,25 +33,26 @@ has 'loopinterval' => (
   ,default => 1 # 1 minute
 );
 
+has 'debug' => (
+  is => 'rw',
+  default => 0,
+);
+
 sub connect{
   my $self = shift;
-  $self->db(DBIx::Simple->connect($self->dbdsn, $self->dbuser, $self->dbpass));
-  if($self->dbname){
-    $self->db->query('USE ' . $self->dbname . ';');
-  }
+  $self->db( SKOD::DB::Schema->connect($self->dbdsn, $self->dbuser, $self->dbpass ) );
+  $self->db->storage->debug($self->debug);
+  $self->db->deploy; # example: generates tables if they don't exist, otherwises ugly warnings
+                     # should be handled properly when less fucked up
 };
 
 sub register{ #REGISTERS A NEW JOB
   my $self   = shift;
   my $name   = shift;
-  my $psa    = md5_hex($name);
+  my $psa    = md5_hex($name); 
   my $return = 1;
-  try{
-    $self->db->query('INSERT INTO jobs (PSA, NAM) VALUES (??);', ($psa, $name));
-  }catch{
-    $return = $_;
-  }
-  return $return;
+
+  return 1 if $self->db->resultset('jobs')->create({ PSA => $psa, NAM => $name });
 };
 
 sub genuuid{
@@ -61,8 +63,14 @@ sub genuuid{
 sub dump{
   my $self = shift;
   my $tbl  = shift;
-  my $rows = $self->db->query('SELECT * FROM ' . $tbl . ';')->hashes;
-  print Dumper($rows);
+
+  my $rows = $self->db->resultset($tbl)->search({}, {
+        result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+  });
+  while(my $hashref = $rows->next){
+    print Dumper $hashref;
+  }
+
 };
 
 sub start{
@@ -76,5 +84,6 @@ sub start{
   $self->{eventloop}->recv;
   return 1;
 };
+
 
 1;
