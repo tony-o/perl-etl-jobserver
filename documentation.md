@@ -24,17 +24,19 @@ jobs (both require XML extraction):
 2. rss feed from your favorite nerd
 
 scheduling:
-  job 1:
+
+job 1:
 
 1. will register with the job server providing an extractor class name, and run interval
 2. will get a jobid from job server
 3. will store my own master data related to job (column information, jobid, validation, etc)
 
-  job 2:
+job 2:
 
 1. see job 1 steps but the jobid will be different
 
 running:
+
 job 1:
 
 1. will be instanced by job server and forked off
