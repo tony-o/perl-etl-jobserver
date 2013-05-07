@@ -42,14 +42,14 @@ sub connect{
   my $self = shift;
   $self->db( SKOD::DB::Schema->connect($self->dbdsn, $self->dbuser, $self->dbpass ) );
   $self->db->storage->debug($self->debug);
-  $self->db->deploy; # example: generates tables if they don't exist, otherwises ugly warnings
-                     # should be handled properly when less fucked up
+  #$self->db->deploy; # example: generates tables if they don't exist, otherwises ugly warnings
+                      # should be handled properly when less fucked up
 };
 
 sub register{ #REGISTERS A NEW JOB
   my $self   = shift;
   my $name   = shift;
-  my $psa    = md5_hex($name); 
+  my $psa    = $name; #md5_hex($name); hashing is done in DB::Schema::Result::jobs.pm automatically 
   my $return = 1;
 
   return 1 if $self->db->resultset('jobs')->create({ PSA => $psa, NAM => $name });
