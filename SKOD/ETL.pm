@@ -2,9 +2,7 @@ package SKOD::ETL;
 use Moose;
 use SKOD::DB::Schema;
 use DBIx::Class::ResultClass::HashRefInflator; 
-use Digest::MD5 qw(md5_hex);
 use Try::Tiny;
-use UUID::Tiny;
 use AnyEvent;
 use Data::Dumper;
 
@@ -42,7 +40,7 @@ sub connect{
   my $self = shift;
   $self->db( SKOD::DB::Schema->connect($self->dbdsn, $self->dbuser, $self->dbpass ) );
   $self->db->storage->debug($self->debug);
-  #$self->db->deploy; # example: generates tables if they don't exist, otherwises ugly warnings
+  $self->db->deploy; # example: generates tables if they don't exist, otherwises ugly warnings
                       # should be handled properly when less fucked up
 };
 
@@ -53,11 +51,6 @@ sub register{ #REGISTERS A NEW JOB
   my $return = 1;
 
   return 1 if $self->db->resultset('jobs')->create({ PSA => $psa, NAM => $name });
-};
-
-sub genuuid{
-  my $self = shift;
-  return create_UUID_as_string(UUID_V4);
 };
 
 sub dump{
