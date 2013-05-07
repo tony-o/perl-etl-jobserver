@@ -30,14 +30,14 @@ __PACKAGE__->set_primary_key("ID");
 
 =head1 RELATIONSHIPS
 
-=head2 psa (might_have)
+=head2 psa (has_many)
 
 Links jobs table to psa table.
 
 =cut
 
-__PACKAGE__->might_have(
-    psa =>
+__PACKAGE__->has_many(
+    psas =>
     'SKOD::DB::Schema::Result::psa',
     { 'foreign.PSAID' => 'self.PSAID' }
   );

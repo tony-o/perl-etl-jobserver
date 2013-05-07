@@ -7,7 +7,8 @@ use AnyEvent;
 use Data::Dumper;
 
 has 'db'     => (
-  is => 'rw'
+  is => 'rw',
+  default => 'SKOD::DB::Schema',
 );
 
 has 'dbdsn'  => (

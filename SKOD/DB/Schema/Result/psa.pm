@@ -17,9 +17,10 @@ __PACKAGE__->add_columns(
     unique        => 1, 
     is_nullable   => 0,
 
-    encode_column => 1,
-    encode_class  => 'Digest',
-    encode_args   => { algorithm => 'SHA-1', format => 'hex' },
+    # the relationship to jobs currently handles the encoding
+    #encode_column => 1,
+    #encode_class  => 'Digest',
+    #encode_args   => { algorithm => 'SHA-1', format => 'hex' },
   },
   "TBL",
   { data_type => "text", is_nullable => 1 }, # make is_nullable => 0 in the future
