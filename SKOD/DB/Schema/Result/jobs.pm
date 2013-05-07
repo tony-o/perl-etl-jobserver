@@ -10,7 +10,7 @@ __PACKAGE__->table("jobs");
 __PACKAGE__->add_columns(
   "ID",
   { data_type => "text", is_nullable => 0 },
-  "PSA",
+  "PSAID",
   { data_type     => "text", 
     unique        => 1, 
     is_nullable   => 0,
@@ -27,5 +27,19 @@ __PACKAGE__->uuid_columns('ID');
 
 __PACKAGE__->set_primary_key("ID");
 
+
+=head1 RELATIONSHIPS
+
+=head2 psa (might_have)
+
+Links jobs table to psa table.
+
+=cut
+
+__PACKAGE__->might_have(
+    psa =>
+    'SKOD::DB::Schema::Result::psa',
+    { 'foreign.PSAID' => 'self.PSAID' }
+  );
 
 1;
