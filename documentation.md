@@ -23,20 +23,24 @@ jobs (both require XML extraction):
 
 scheduling:
   job 1:
-    1 will register with the job server providing an extractor class name, and run interval
-    2 will get a jobid from job server
-    3 will store my own master data related to job (column information, jobid, validation, etc)
+
+1. will register with the job server providing an extractor class name, and run interval
+2. will get a jobid from job server
+3. will store my own master data related to job (column information, jobid, validation, etc)
 
   job 2:
-    1 see job 1 steps but the jobid will be different
+
+1. see job 1 steps but the jobid will be different
 
 running:
-  job 1:
-    1 will be instanced by job server and forked off
-    2 will pull in your bullshit weather data
-    3 generate rows and fill em up with all your weather data INCLUDING REQID MAPPED TO THE PROVIDED PSAID
+job 1:
+
+1. will be instanced by job server and forked off
+2. will pull in your bullshit weather data
+3. generate rows and fill em up with all your weather data INCLUDING REQID MAPPED TO THE PROVIDED PSAID
   
-  job 2:
-    1 see job 1 but will use a different PSA table in the _PSA database
+job 2:
+
+1. see job 1 but will use a different PSA table in the _PSA database
 
 
