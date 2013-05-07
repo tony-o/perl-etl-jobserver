@@ -2,6 +2,8 @@
 
 job server's purpose is to run jobs at regularly scheduled intervals, eventually it can be used for ad-hoc but it's not planned right now.
 
+also webscale
+
 ## job server hooks (api)
 
 ### extractors
