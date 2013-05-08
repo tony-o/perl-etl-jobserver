@@ -7,43 +7,25 @@ use AnyEvent;
 use Data::Dumper;
 
 has 'db'     => (
-  is => 'rw',
-  default => 'SKOD::DB::Schema',
-);
-
-has 'dbdsn'  => (
-  is => 'rw',
-);
-
-has 'dbname' => (
-  is => 'rw'
-);
-
-has 'dbuser' => (
-  is => 'rw'
-);
-
-has 'dbpass' => (
-  is => 'rw'
+  is       => 'rw',
+  lazy     => 1,
+  default  => 'SKOD::DB::Schema',
 );
 
 has 'loopinterval' => (
-  is => 'rw'
+  is       => 'rw'
   ,default => 1 # 1 minute
 );
 
 has 'debug' => (
-  is => 'rw',
-  default => 0,
+  is       => 'rw',
+  default  => 0,
 );
 
 sub connect{
   my $self = shift;
 
-  $self->db( @_ ? SKOD::DB::Schema->connect(@_) # just pass directly to DBIx::Class connect
-                : SKOD::DB::Schema->connect($self->dbdsn, $self->dbuser, $self->dbpass ) # or use moose stuff
-  );
-
+  $self->db( $self->db->connect(@_) );
   $self->db->storage->debug($self->debug);
 };
 
